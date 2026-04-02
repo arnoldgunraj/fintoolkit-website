@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FintoolKit BankBridge — NetSuite Bank Import Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2844;
+    --blue: #1a6abf;
+    --blue-light: #3b8fd4;
+    --accent: #5dcaa5;
+    --text: #1a1a2e;
+    --text-mid: #4a5568;
+    --text-light: #8896a8;
+    --border: #e2e8f0;
+    --surface: #f8fafc;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10, 22, 40, 0.96);
+    backdrop-filter: blur(12px);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 28px;
+    height: 28px;
+    background: var(--blue);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+  }
+
+  .nav-logo-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.2px;
+  }
+
+  .nav-logo-sub {
+    font-size: 11px;
+    color: #5a8fc4;
+    margin-left: 2px;
+  }
+
+  .nav-cta {
+    background: var(--blue);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--blue-light); }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: 140px 2rem 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(26,106,191,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(93,202,165,0.12);
+    border: 1px solid rgba(93,202,165,0.3);
+    color: var(--accent);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 600;
+    color: white;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    max-width: 760px;
+    margin: 0 auto 20px;
+  }
+
+  .hero h1 span {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: #8aa4c0;
+    max-width: 560px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover {
+    background: var(--blue-light);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .hero-lifetime {
+    font-size: 13px;
+    color: #5a8fc4;
+    margin-top: -46px;
+    margin-bottom: 60px;
+  }
+
+  /* APP PREVIEW */
+  .app-preview {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #0f1e35;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .app-titlebar {
+    background: #1a1a1a;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 7px;
+  }
+
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green { background: #28c840; }
+
+  .app-header {
+    background: #0f2844;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .app-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .app-logo-mark {
+    width: 26px; height: 26px;
+    background: #1a6abf;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .app-header-title { color: white; font-size: 14px; font-weight: 600; }
+  .app-header-sub { color: #5a8fc4; font-size: 10px; }
+
+  .app-badge {
+    background: rgba(255,188,46,0.15);
+    border: 1px solid rgba(255,188,46,0.3);
+    color: #febc2e;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+
+  .app-tabs {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    padding: 0 16px;
+  }
+
+  .app-tab {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #8896a8;
+    border-bottom: 2px solid transparent;
+  }
+
+  .app-tab.active {
+    color: #0f2844;
+    border-bottom-color: #1a6abf;
+    font-weight: 500;
+  }
+
+  .app-body {
+    background: #f8fafc;
+    padding: 16px;
+  }
+
+  .app-field-label {
+    font-size: 11px;
+    color: #8896a8;
+    margin-bottom: 5px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .app-field {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    height: 32px;
+    margin-bottom: 12px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    color: #8896a8;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .app-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .app-btn {
+    padding: 7px 16px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .app-btn-blue { background: #1a6abf; }
+  .app-btn-purple { background: #7c3aed; }
+
+  .app-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .app-stat {
+    background: #eeedfe;
+    border-radius: 5px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .app-stat-num {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f2844;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .app-stat-label { font-size: 9px; color: #8896a8; }
+
+  .app-log {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 8px 10px;
+    height: 60px;
+  }
+
+  .app-log-line {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: #16a34a;
+    line-height: 1.8;
+  }
+
+  /* SECTION BASE */
+  section { padding: 80px 2rem; }
+
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .section-title {
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 16px;
+    color: var(--text-mid);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* PROBLEM */
+  .problem { background: var(--surface); }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .problem-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+  }
+
+  .problem-icon {
+    width: 40px; height: 40px;
+    background: #fff0f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .problem-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .problem-card p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+    counter-reset: step;
+  }
+
+  .step {
+    position: relative;
+    padding-left: 0;
+  }
+
+  .step-num {
+    width: 36px; height: 36px;
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 14px;
+  }
+
+  .step h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .step p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* BANKS */
+  .banks { background: var(--surface); }
+
+  .banks-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+  }
+
+  .bank-tag {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: var(--text-mid);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .bank-tag.highlight {
+    background: #e6f1fb;
+    border-color: #b5d4f4;
+    color: #185fa5;
+  }
+
+  /* VS COMPARISON */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-size: 14px;
+  }
+
+  .comparison-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .comparison-table th:first-child { width: 40%; }
+
+  .comparison-table th.col-them {
+    background: var(--surface);
+    color: var(--text-mid);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .comparison-table th.col-us {
+    background: var(--navy);
+    color: white;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .comparison-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comparison-table tr:last-child td { border-bottom: none; }
+
+  .comparison-table td.col-them {
+    background: var(--surface);
+    color: var(--text-mid);
+  }
+
+  .comparison-table td.col-us {
+    background: #e6f1fb;
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  .check { color: #16a34a; font-size: 16px; }
+  .cross { color: #dc2626; font-size: 16px; }
+
+  /* PRICING */
+  .pricing { background: var(--navy); }
+  .pricing .section-title { color: white; }
+  .pricing .section-sub { color: #8aa4c0; }
+  .pricing .section-label { color: var(--accent); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .pricing-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 32px;
+    position: relative;
+  }
+
+  .pricing-card.featured {
+    background: rgba(26,106,191,0.15);
+    border-color: rgba(26,106,191,0.4);
+  }
+
+  .pricing-popular {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #0a2e20;
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .pricing-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #8aa4c0;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .pricing-price {
+    font-size: 42px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pricing-price span {
+    font-size: 18px;
+    font-weight: 400;
+    color: #8aa4c0;
+  }
+
+  .pricing-billing {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 24px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 28px;
+  }
+
+  .pricing-features li {
+    font-size: 13px;
+    color: #c8d8e8;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .pricing-features li::before {
+    content: '✓';
+    color: var(--accent);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .pricing-btn {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .pricing-btn-outline {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+  }
+
+  .pricing-btn-outline:hover {
+    background: rgba(255,255,255,0.06);
+  }
+
+  .pricing-btn-solid {
+    background: var(--blue);
+    color: white;
+  }
+
+  .pricing-btn-solid:hover {
+    background: var(--blue-light);
+  }
+
+  /* TRIAL CTA */
+  .trial-cta {
+    text-align: center;
+    margin-top: 48px;
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .trial-cta p {
+    color: #8aa4c0;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .trial-cta strong { color: white; }
+
+  /* FAQ */
+  .faq-list { margin-top: 40px; }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .faq-q {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .faq-a {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    padding: 40px 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-logo-mark {
+    width: 24px; height: 24px;
+    background: var(--blue);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .footer-logo-text { color: white; font-size: 14px; font-weight: 500; }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: #5a8fc4;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: white; }
+
+  .footer-copy {
+    color: #3a5a7a;
+    font-size: 12px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero > * {
+    animation: fadeUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-badge { animation-delay: 0.1s; }
+  .hero h1 { animation-delay: 0.2s; }
+  .hero-sub { animation-delay: 0.3s; }
+  .hero-actions { animation-delay: 0.4s; }
+  .hero-lifetime { animation-delay: 0.45s; }
+  .app-preview { animation-delay: 0.5s; }
+
+  @media (max-width: 640px) {
+    .app-stats { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { flex-direction: column; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">F</div>
+    <div>
+      <div class="nav-logo-text">FintoolKit</div>
+    </div>
+  </a>
+  <a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37" class="nav-cta">Buy Now — $99</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">NetSuite Bank Import Tool</div>
+  <h1>Stop reformatting<br>bank CSVs for <span>NetSuite</span></h1>
+  <p class="hero-sub">Drop in any bank export. Get a NetSuite-ready import file in seconds. Supports 14+ banks with zero configuration.</p>
+  <div class="hero-actions">
+    <a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37" class="btn-primary">
+      Buy License — $99
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#trial" class="btn-secondary">Start free 25-day trial</a>
+  </div>
+  <p class="hero-lifetime">Lifetime license · Pay once · Tied to your work email</p>
+
+  <!-- App mockup -->
+  <div class="app-preview">
+    <div class="app-titlebar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    <div class="app-header">
+      <div class="app-header-left">
+        <div class="app-logo-mark">F</div>
+        <div>
+          <div class="app-header-title">FintoolKit</div>
+          <div class="app-header-sub">BankBridge · NetSuite Bank Import</div>
+        </div>
+      </div>
+      <div class="app-badge">Trial · 25 days left</div>
+    </div>
+    <div class="app-tabs">
+      <div class="app-tab active">Step 1: Convert</div>
+      <div class="app-tab">Step 2: Upload via SFTP</div>
+      <div class="app-tab">License</div>
+    </div>
+    <div class="app-body">
+      <div class="app-field-label">Source Folder (bank CSVs)</div>
+      <div class="app-field">C:/Downloads/Bank Statements/January 2026</div>
+      <div class="app-field-label">Output Folder (NetSuite CSVs)</div>
+      <div class="app-field">C:/Downloads/NetSuite Import/</div>
+      <div class="app-buttons">
+        <div class="app-btn app-btn-blue">Convert Files</div>
+        <div class="app-btn app-btn-purple">Convert + Upload</div>
+      </div>
+      <div class="app-stats">
+        <div class="app-stat"><div class="app-stat-num">13</div><div class="app-stat-label">Files converted</div></div>
+        <div class="app-stat"><div class="app-stat-num">847</div><div class="app-stat-label">Transactions</div></div>
+        <div class="app-stat"><div class="app-stat-num">0</div><div class="app-stat-label">Errors</div></div>
+        <div class="app-stat"><div class="app-stat-num">0</div><div class="app-stat-label">Remaining</div></div>
+      </div>
+      <div class="app-log">
+        <div class="app-log-line">✓ 1011 Chase x4421.csv → 1011.csv (94 transactions)</div>
+        <div class="app-log-line">✓ 1012 BofA x8832.csv → 1012.csv (61 transactions)</div>
+        <div class="app-log-line">✓ 1013 Goldman x0091.csv → 1013.csv (38 transactions)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <div class="section-label">The problem</div>
+    <h2 class="section-title">Manual bank imports are a monthly headache</h2>
+    <p class="section-sub">Every bank exports a different CSV format. NetSuite expects one specific format. Someone has to bridge that gap every single month.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">⏱</div>
+        <h3>Hours wasted every month-end</h3>
+        <p>Reformatting Chase, Bank of America, Goldman, and a dozen other formats by hand before you can even start the import.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">⚙</div>
+        <h3>Propersoft requires manual format setup</h3>
+        <p>Tools like Propersoft make you build and save a mapping profile for every bank before they will process a single file.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🏦</div>
+        <h3>Native bank feeds don't cover everyone</h3>
+        <p>NetSuite's bank feed integrations cost extra, require IT setup, and don't work for every bank — especially regional banks and credit unions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Drop in. Convert. Upload.</h2>
+    <p class="section-sub">No format configuration. No mapping profiles. No code. BankBridge detects your bank format automatically.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Select your bank CSV folder</h3>
+        <p>Point BankBridge at the folder containing your bank export files. Name files starting with the GL account number.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Click Convert Files</h3>
+        <p>BankBridge auto-detects every bank format in the folder and converts all files in one pass. No setup required.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Upload to NetSuite</h3>
+        <p>Use the built-in SFTP upload or manually import via Transactions → Bank → Banking Import History.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Reconcile as normal</h3>
+        <p>Your transactions appear in NetSuite ready for matching. Same workflow, zero reformatting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BANKS -->
+<section class="banks">
+  <div class="container">
+    <div class="section-label">Supported banks</div>
+    <h2 class="section-title">Works with 14+ bank formats</h2>
+    <p class="section-sub">The dynamic detection engine handles any bank with recognizable column headers — including formats we have not seen yet.</p>
+    <div class="banks-grid">
+      <span class="bank-tag highlight">JPMorgan Chase</span>
+      <span class="bank-tag highlight">Bank of America</span>
+      <span class="bank-tag highlight">Goldman Sachs</span>
+      <span class="bank-tag highlight">Morgan Stanley</span>
+      <span class="bank-tag">SVB / First Republic</span>
+      <span class="bank-tag">Everbank / Atlantic Capital</span>
+      <span class="bank-tag">First Horizon</span>
+      <span class="bank-tag">Community FCU</span>
+      <span class="bank-tag">Eagle Bank</span>
+      <span class="bank-tag">First National Bank</span>
+      <span class="bank-tag">Berkshire Bank</span>
+      <span class="bank-tag">Merrill Lynch</span>
+      <span class="bank-tag">US Bank</span>
+      <span class="bank-tag">+ any new format</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section>
+  <div class="container">
+    <div class="section-label">vs. Alternatives</div>
+    <h2 class="section-title">Why BankBridge beats the alternatives</h2>
+    <p class="section-sub">Compare what you get with BankBridge versus spending hours doing it manually or fighting with Propersoft.</p>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="col-them">Manual / Propersoft</th>
+          <th class="col-us">FintoolKit BankBridge</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Auto-detect any bank format</td>
+          <td class="col-them"><span class="cross">✗</span> Manual mapping required</td>
+          <td class="col-us"><span class="check">✓</span> Fully automatic</td>
+        </tr>
+        <tr>
+          <td>Batch process entire folder</td>
+          <td class="col-them"><span class="cross">✗</span> One file at a time</td>
+          <td class="col-us"><span class="check">✓</span> All files in one click</td>
+        </tr>
+        <tr>
+          <td>Built-in SFTP upload to NetSuite</td>
+          <td class="col-them"><span class="cross">✗</span> Not included</td>
+          <td class="col-us"><span class="check">✓</span> Included</td>
+        </tr>
+        <tr>
+          <td>No Python or IT setup required</td>
+          <td class="col-them"><span class="cross">✗</span> Varies</td>
+          <td class="col-us"><span class="check">✓</span> Single .exe file</td>
+        </tr>
+        <tr>
+          <td>Pricing</td>
+          <td class="col-them">$200–400/mo subscription</td>
+          <td class="col-us"><strong>$99 one-time lifetime</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="trial">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Pay once. Use forever.</h2>
+    <p class="section-sub">Lifetime licenses tied to your corporate email. No subscriptions. No renewals. No surprises.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Single</div>
+        <div class="pricing-price">$99<span></span></div>
+        <div class="pricing-billing">One-time · Lifetime</div>
+        <ul class="pricing-features">
+          <li>1 corporate email address</li>
+          <li>All 14+ bank formats</li>
+          <li>Batch folder processing</li>
+          <li>Built-in SFTP upload</li>
+          <li>Free updates</li>
+          <li>Email support</li>
+        </ul>
+        <a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37" class="pricing-btn pricing-btn-outline">Buy Single License</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-popular">Most popular</div>
+        <div class="pricing-name">Team 3-seat</div>
+        <div class="pricing-price">$249<span></span></div>
+        <div class="pricing-billing">One-time · Lifetime · 3 users</div>
+        <ul class="pricing-features">
+          <li>3 corporate email addresses</li>
+          <li>All 14+ bank formats</li>
+          <li>Batch folder processing</li>
+          <li>Built-in SFTP upload</li>
+          <li>Free updates</li>
+          <li>Priority email support</li>
+        </ul>
+        <a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37" class="pricing-btn pricing-btn-solid">Buy Team License</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-name">Team 10-seat</div>
+        <div class="pricing-price">$699<span></span></div>
+        <div class="pricing-billing">One-time · Lifetime · 10 users</div>
+        <ul class="pricing-features">
+          <li>10 corporate email addresses</li>
+          <li>All 14+ bank formats</li>
+          <li>Batch folder processing</li>
+          <li>Built-in SFTP upload</li>
+          <li>Free updates</li>
+          <li>Priority email support</li>
+        </ul>
+        <a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37" class="pricing-btn pricing-btn-outline">Buy Team License</a>
+      </div>
+    </div>
+    <div class="trial-cta">
+      <p>Not ready to buy? <strong>Try it free for 25 days.</strong> Download the app, enter your work email, and start converting immediately. No credit card required.</p>
+      <a href="#download" class="btn-primary" style="display:inline-flex;">Start Free Trial</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">What happens when I change jobs?</div>
+        <div class="faq-a">Your license is tied to your corporate email address. If you move to a new company you would need a new license for your new work email. Your previous employer's license remains active for whoever takes over that email.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does it work with my bank?</div>
+        <div class="faq-a">BankBridge supports 14+ named bank formats and auto-detects any CSV with recognizable column headers. Start a free trial and test it with your actual bank exports before purchasing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Does this replace NetSuite's native bank feeds?</div>
+        <div class="faq-a">It complements them. Native bank feeds are great when they work, but they require IT setup, cost extra, and don't cover every bank. BankBridge handles the banks that fall through the gaps — especially during M&A transitions when you're working across multiple ERP instances.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is internet access required to run the app?</div>
+        <div class="faq-a">A brief online check validates your license on launch. If you're offline, BankBridge operates in grace mode for up to 20 days before requiring reconnection. The conversion itself works entirely offline.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is included in free updates?</div>
+        <div class="faq-a">All future bank format additions and bug fixes are included in your lifetime license at no extra charge. If a new bank format is added to BankBridge you get it automatically.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I get support?</div>
+        <div class="faq-a">Email support@fintoolkit.io. We typically respond within one business day.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-mark">F</div>
+      <div class="footer-logo-text">FintoolKit</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:support@fintoolkit.io">support@fintoolkit.io</a></li>
+      <li><a href="https://fintoolkit.lemonsqueezy.com/checkout/buy/b59f3b65-10d5-4c8c-ac85-b13b27cb5e37">Buy License</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 FintoolKit. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
