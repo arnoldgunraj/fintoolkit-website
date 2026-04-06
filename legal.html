@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal — FintoolKit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --blue: #1a6abf;
+    --text: #1a1a2e;
+    --text-mid: #4a5568;
+    --border: #e2e8f0;
+    --surface: #f8fafc;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.7;
+  }
+
+  nav {
+    background: var(--navy);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 28px; height: 28px;
+    background: var(--blue);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+  }
+
+  .nav-logo-text { color: white; font-size: 15px; font-weight: 600; }
+
+  .nav-back {
+    color: #7fc4f5;
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .nav-back:hover { color: white; }
+
+  .hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 2rem;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .hero p {
+    color: var(--text-mid);
+    font-size: 14px;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 40px 0;
+  }
+
+  .toc h3 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-mid);
+    margin-bottom: 12px;
+  }
+
+  .toc ol {
+    padding-left: 20px;
+  }
+
+  .toc li {
+    margin-bottom: 6px;
+  }
+
+  .toc a {
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .toc a:hover { text-decoration: underline; }
+
+  .section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-badge {
+    display: inline-block;
+    background: #e6f1fb;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 20px;
+    scroll-margin-top: 80px;
+  }
+
+  .section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 24px 0 8px;
+  }
+
+  .section p {
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-bottom: 14px;
+  }
+
+  .section ul, .section ol {
+    padding-left: 20px;
+    margin-bottom: 14px;
+  }
+
+  .section li {
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-bottom: 6px;
+  }
+
+  .highlight-box {
+    background: #e6f1fb;
+    border-left: 3px solid var(--blue);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+  }
+
+  .highlight-box p {
+    color: #185fa5;
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  .refund-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  .refund-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .refund-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-mid);
+  }
+
+  .refund-table tr:nth-child(even) td { background: var(--surface); }
+
+  .check { color: #16a34a; font-weight: 600; }
+  .cross { color: #dc2626; font-weight: 600; }
+
+  footer {
+    background: var(--navy);
+    padding: 32px 2rem;
+    margin-top: 60px;
+  }
+
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-copy { color: #3a5a7a; font-size: 12px; }
+
+  .footer-links { display: flex; gap: 20px; }
+
+  .footer-links a {
+    color: #5a8fc4;
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .footer-links a:hover { color: white; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">F</div>
+    <div class="nav-logo-text">FintoolKit</div>
+  </a>
+  <a href="/" class="nav-back">← Back to fintoolkit.io</a>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <h1>Legal</h1>
+    <p>Terms of Service, Privacy Policy, and Refund Policy for FintoolKit BankBridge · Last updated April 6, 2026</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#terms">Terms of Service</a></li>
+      <li><a href="#privacy">Privacy Policy</a></li>
+      <li><a href="#refund">Refund Policy</a></li>
+    </ol>
+  </div>
+
+  <!-- TERMS OF SERVICE -->
+  <div class="section" id="terms">
+    <div class="section-badge">Terms of Service</div>
+    <h2>Terms of Service</h2>
+
+    <p>These Terms of Service govern your use of FintoolKit BankBridge ("the Software") provided by FintoolKit ("we", "us", "our"). By downloading, installing, or using the Software you agree to these terms.</p>
+
+    <h3>1. License Grant</h3>
+    <p>Upon purchase of a valid license, we grant you a non-exclusive, non-transferable, perpetual license to install and use FintoolKit BankBridge on devices associated with your licensed email address. The license is tied to the corporate email address provided at activation.</p>
+
+    <h3>2. License Restrictions</h3>
+    <p>You may not:</p>
+    <ul>
+      <li>Share, resell, sublicense, or transfer your license to another person or organization</li>
+      <li>Reverse engineer, decompile, or disassemble the Software</li>
+      <li>Use the Software for any unlawful purpose</li>
+      <li>Remove or alter any proprietary notices in the Software</li>
+    </ul>
+
+    <h3>3. Free Trial</h3>
+    <p>A free 25-day trial is available upon verification of a valid corporate email address. The trial requires an internet connection for activation. After 25 days, continued use requires purchase of a license.</p>
+
+    <h3>4. License Types</h3>
+    <ul>
+      <li><strong>Single License ($99):</strong> One corporate email address, one user.</li>
+      <li><strong>Team 3-Seat ($249):</strong> Up to three corporate email addresses within the same organization.</li>
+      <li><strong>Team 10-Seat ($699):</strong> Up to ten corporate email addresses within the same organization.</li>
+    </ul>
+
+    <h3>5. Updates</h3>
+    <p>Your license includes all future updates to FintoolKit BankBridge at no additional charge. We reserve the right to modify, update, or discontinue features with reasonable notice.</p>
+
+    <h3>6. Disclaimer of Warranties</h3>
+    <p>The Software is provided "as is" without warranty of any kind. We do not warrant that the Software will be error-free or uninterrupted. You assume all responsibility for selecting the Software to achieve your intended results.</p>
+
+    <h3>7. Limitation of Liability</h3>
+    <p>To the fullest extent permitted by applicable law, FintoolKit shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Software, even if advised of the possibility of such damages. Our total liability shall not exceed the amount you paid for the Software.</p>
+
+    <h3>8. Governing Law</h3>
+    <p>These Terms are governed by the laws of the State of New York, United States, without regard to conflict of law principles.</p>
+
+    <h3>9. Changes to Terms</h3>
+    <p>We reserve the right to update these Terms at any time. Continued use of the Software after changes constitutes acceptance of the updated Terms.</p>
+
+    <h3>10. Contact</h3>
+    <p>Questions about these Terms? Email <a href="mailto:support@fintoolkit.io" style="color:var(--blue)">support@fintoolkit.io</a>.</p>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div class="section" id="privacy">
+    <div class="section-badge">Privacy Policy</div>
+    <h2>Privacy Policy</h2>
+
+    <div class="highlight-box">
+      <p>We collect only what is necessary to operate your license. We do not sell your data to third parties.</p>
+    </div>
+
+    <h3>1. Information We Collect</h3>
+    <p>When you use FintoolKit BankBridge we collect:</p>
+    <ul>
+      <li><strong>Email address:</strong> Required for trial activation and license registration. Must be a corporate (non-free) email address.</li>
+      <li><strong>Machine identifier:</strong> A non-personally-identifiable hash used to associate your license with your device. Does not contain hardware serial numbers or personal information.</li>
+      <li><strong>License status:</strong> Whether your license is active, in trial, or expired. Stored on our backend to validate your access.</li>
+      <li><strong>Purchase information:</strong> If you purchase a license, our payment processor (Paddle) collects payment details. We do not store credit card numbers.</li>
+    </ul>
+
+    <h3>2. Information We Do Not Collect</h3>
+    <ul>
+      <li>The contents of any bank CSV files you convert</li>
+      <li>Any financial data, transaction data, or account numbers</li>
+      <li>Your NetSuite credentials or SFTP credentials</li>
+      <li>Browsing history or usage patterns</li>
+    </ul>
+
+    <h3>3. How We Use Your Information</h3>
+    <ul>
+      <li>To validate your license on application launch</li>
+      <li>To send OTP verification codes and license keys by email</li>
+      <li>To respond to support requests</li>
+      <li>To send product update notifications (you may opt out at any time)</li>
+    </ul>
+
+    <h3>4. Data Storage</h3>
+    <p>Your email address and license status are stored in a secured PostgreSQL database hosted on Railway. Data is retained for the duration of your license and for up to 2 years after expiry for record-keeping purposes.</p>
+
+    <h3>5. Third Party Services</h3>
+    <ul>
+      <li><strong>Paddle:</strong> Payment processing. Subject to Paddle's privacy policy.</li>
+      <li><strong>Brevo:</strong> Transactional email delivery. Subject to Brevo's privacy policy.</li>
+      <li><strong>Railway:</strong> Backend hosting. Subject to Railway's privacy policy.</li>
+    </ul>
+
+    <h3>6. Your Rights</h3>
+    <p>You may request deletion of your data at any time by emailing <a href="mailto:support@fintoolkit.io" style="color:var(--blue)">support@fintoolkit.io</a>. We will delete your email address and license record within 30 days. Note that deleting your data will deactivate your license.</p>
+
+    <h3>7. Cookies</h3>
+    <p>The FintoolKit BankBridge desktop application does not use cookies. The fintoolkit.io website does not use tracking cookies or analytics.</p>
+
+    <h3>8. Children's Privacy</h3>
+    <p>FintoolKit BankBridge is intended for professional business use. We do not knowingly collect data from anyone under 18 years of age.</p>
+
+    <h3>9. Contact</h3>
+    <p>Privacy questions? Email <a href="mailto:support@fintoolkit.io" style="color:var(--blue)">support@fintoolkit.io</a>.</p>
+  </div>
+
+  <!-- REFUND POLICY -->
+  <div class="section" id="refund">
+    <div class="section-badge">Refund Policy</div>
+    <h2>Refund Policy</h2>
+
+    <div class="highlight-box">
+      <p>We offer a 14-day money-back guarantee on all license purchases, no questions asked.</p>
+    </div>
+
+    <h3>Refund Eligibility</h3>
+
+    <table class="refund-table">
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Eligible for Refund</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Request within 14 days of purchase</td>
+          <td><span class="check">Yes</span> — Full refund, no questions asked</td>
+        </tr>
+        <tr>
+          <td>Software does not work as described</td>
+          <td><span class="check">Yes</span> — Full refund at any time</td>
+        </tr>
+        <tr>
+          <td>Duplicate purchase</td>
+          <td><span class="check">Yes</span> — Full refund of duplicate charge</td>
+        </tr>
+        <tr>
+          <td>Request after 14 days</td>
+          <td><span class="cross">No</span> — Outside refund window</td>
+        </tr>
+        <tr>
+          <td>Change of mind after 14 days</td>
+          <td><span class="cross">No</span> — Outside refund window</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>How to Request a Refund</h3>
+    <p>Email <a href="mailto:support@fintoolkit.io" style="color:var(--blue)">support@fintoolkit.io</a> with your order number and the email address used for purchase. We will process your refund within 5 business days. Refunds are returned to the original payment method.</p>
+
+    <h3>Free Trial</h3>
+    <p>FintoolKit BankBridge includes a free 25-day trial that requires no payment. We encourage you to fully evaluate the Software during the trial period before purchasing.</p>
+
+    <h3>License Deactivation on Refund</h3>
+    <p>Upon issuing a refund your license will be deactivated and access to the Software will be restricted. The Software may be reinstalled if you purchase again in the future.</p>
+
+    <h3>Contact</h3>
+    <p>Refund questions? Email <a href="mailto:support@fintoolkit.io" style="color:var(--blue)">support@fintoolkit.io</a>. We typically respond within one business day.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 FintoolKit. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="mailto:support@fintoolkit.io">support@fintoolkit.io</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
